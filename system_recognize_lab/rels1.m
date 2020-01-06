@@ -1,0 +1,19 @@
+ function thita=rels1(z,na,nb,nc)
+ %nz=size(z(:,1));
+ nn=na+nb+nc+1;
+ thitak=ones(nn,1)*0.001;
+ thita=zeros(nn,501);
+K=zeros(nn,1);
+I=eye(nn,nn);
+p1=eye(nn,nn)*(1.0e6);
+p2=zeros(nn,nn);
+e=zeros(501,1);
+for i=na+2:501
+      Q=[[-z(i-1:-1:i-na,1)]',[z(i:-1:i-nb,2)]',[e(i-1:-1:i-nc,1)]'];
+          K=p1*Q'/(Q*p1*Q'+1);
+          p2=(I-K*Q)*p1;
+          thita(:,i)=thitak+K*(z(i,1)-Q*thitak);
+          p1=p2;
+          thitak=thita(:,i);
+          e(i)=z(i,1)-Q*thitak;
+end
